@@ -10,7 +10,7 @@ namespace NobelLaureateDetails
 {
     using System;
     using System.Collections.Generic;
-
+    using System.ComponentModel.DataAnnotations;
     using System.Globalization;
     using Newtonsoft.Json;
     using Newtonsoft.Json.Converters;
@@ -23,8 +23,10 @@ namespace NobelLaureateDetails
 
     public partial class Laureate
     {
+        [Required] //felt that the ID field should be mandatory
         [JsonProperty("id")]
         [JsonConverter(typeof(ParseStringConverter))]
+       
         public long Id { get; set; }
 
         [JsonProperty("firstname")]
@@ -58,6 +60,7 @@ namespace NobelLaureateDetails
         public string DiedCity { get; set; }
 
         [JsonProperty("gender")]
+
         public string Gender { get; set; }
 
         [JsonProperty("prizes")]
