@@ -14,31 +14,37 @@ namespace NobelLaureateDetails.Pages
         {
             List<Laureate> filteredLaureates = new List<Laureate>();
 
+            string physicsNinetyEightlaureates = getJsonFromUrl("http://api.nobelprize.org/v1/prize.json?category=physics&year=1998");
+            Prizes.Laureates Laureates = Prizes.Laureates.FromJson(physicsNinetyEightlaureates);
+
+            List<long> laureatesIds = new List<long>();
+
+            Prizes.Prize prize = Laureates.PrizesArray[1];
+            foreach (Prizes.Laureate laureate in prize.Laureates)
+            {
+                laureatesIds.Add(laureate.Id);
+            }
+
+            foreach (long id in laureatesIds)
+            {
+                string laureateDetailsJson = getJsonFromUrl("http://api.nobelprize.org/v1/laureate.json?id=" + id);
+
+                LaureateDetails laureateDetails = LaureateDetails.FromJson(laureateDetailsJson);
+
+                foreach (Laureate laureate in laureateDetails.Laureates)
+                {
+                    filteredLaureates.Add(laureate);
+                }
+            }
+
+            return new JsonResult(filteredLaureates);
+        }
+
+        private string getJsonFromUrl(string url)
+        {
             using (WebClient webClient = new WebClient())
             {
-                string PhysicsNinetyEight = webClient.DownloadString("http://api.nobelprize.org/v1/prize.json?category=physics&year=1998");
-                Prizes.Laureates Laureates = Prizes.Laureates.FromJson(PhysicsNinetyEight);
-
-                List<long> filteredIds = new List<long>();
-
-                foreach (Prizes.Prize prize in Laureates.PrizesArray)
-                {
-                    foreach (Prizes.Laureate laureate in prize.Laureates) {
-                        filteredIds.Add(laureate.Id);
-                    }
-                }
-
-                foreach (long id in filteredIds) {
-                    string laureateDetails = webClient.DownloadString("http://api.nobelprize.org/v1/laureate.json?id="+id);
-
-                    LaureateDetails array = LaureateDetails.FromJson(laureateDetails);
-
-                    foreach (Laureate laureate in array.Laureates) {
-                        filteredLaureates.Add(laureate);
-                    }
-                }
-
-                return new JsonResult(filteredLaureates);
+                return webClient.DownloadString(url);
             }
         }
     }
