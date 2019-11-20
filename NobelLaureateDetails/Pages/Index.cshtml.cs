@@ -16,7 +16,8 @@ namespace NobelLaureateDetails.Pages
 
             using (WebClient webClient = new WebClient())
             {
-                string PhysicsNinetyEight = webClient.DownloadString("http://api.nobelprize.org/v1/prize.json?category=physics&year=1998");
+                //string PhysicsNinetyEight = webClient.DownloadString("http://api.nobelprize.org/v1/prize.json?category=physics&year=1998");
+                string PhysicsNinetyEight = GetData("http://api.nobelprize.org/v1/prize.json?category=physics&year=1998");
                 Prizes.Laureates Laureates = Prizes.Laureates.FromJson(PhysicsNinetyEight);
 
                 List<long> filteredIds = new List<long>();
@@ -29,17 +30,27 @@ namespace NobelLaureateDetails.Pages
                 }
 
                 foreach (long id in filteredIds) {
-                    string laureateDetails = webClient.DownloadString("http://api.nobelprize.org/v1/laureate.json?id="+id);
+                    //string laureateDetails = webClient.DownloadString("http://api.nobelprize.org/v1/laureate.json?id="+id);
+                    string laureateDetails = GetData("http://api.nobelprize.org/v1/laureate.json?id=" + id);
+                    LaureateDetails laureateDetailsList = LaureateDetails.FromJson(laureateDetails);
 
-                    LaureateDetails array = LaureateDetails.FromJson(laureateDetails);
-
-                    foreach (Laureate laureate in array.Laureates) {
+                    foreach (Laureate laureate in laureateDetailsList.Laureates) {
                         filteredLaureates.Add(laureate);
                     }
                 }
 
                 return new JsonResult(filteredLaureates);
             }
+        }
+
+        private string GetData(string v)
+        {
+            string downloadedData = "";
+            using (WebClient webClient = new WebClient())
+            {
+                downloadedData = webClient.DownloadString(v);
+            }
+            return downloadedData;
         }
     }
 }
