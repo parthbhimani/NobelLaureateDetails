@@ -8,49 +8,77 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace NobelLaureateDetails.Pages
 {
-    public class IndexModel : PageModel
+    [BindProperties]
+    public class LaureatesModel : PageModel
     {
-        public JsonResult OnGet()
+        public bool DataFetched { get; set; }
+        private int paramCount = 0;
+        public void OnPost()
         {
-            List<Laureate> filteredLaureates = new List<Laureate>();
+            string url = generateUrlFromRequest();
+            string laureates = getData(url);
+            Prizes.Laureates Laureates = Prizes.Laureates.FromJson(laureates);
+            ViewData["ResultLaureates"] = Laureates.PrizesArray;
+            DataFetched = true;
+        }
 
-            using (WebClient webClient = new WebClient())
+        private string generateUrlFromRequest()
+        {
+            String Category = Request.Form["Category"];
+            String YearFrom = Request.Form["YearFrom"];
+            String YearTo = Request.Form["YearTo"];
+
+            string url = "http://api.nobelprize.org/v1/prize.json";
+
+            if (!Category.Equals("none"))
             {
-                //string PhysicsNinetyEight = webClient.DownloadString("http://api.nobelprize.org/v1/prize.json?category=physics&year=1998");
-                string PhysicsNinetyEight = GetData("http://api.nobelprize.org/v1/prize.json?category=physics&year=1998");
-                Prizes.Laureates Laureates = Prizes.Laureates.FromJson(PhysicsNinetyEight);
+                url = url + getParamSeperator() + "category=" + Category;
+            }
+            if (YearFrom.Length == 4)
+            {
+                url = url + getParamSeperator() + "year=" + YearFrom;
+            }
+            if (YearTo.Length == 4)
+            {
+                url = url + getParamSeperator() + "yearTo=" + YearTo;
+            }
 
-                List<long> filteredIds = new List<long>();
+            return url;
+        }
 
-                foreach (Prizes.Prize prize in Laureates.PrizesArray)
-                {
-                    foreach (Prizes.Laureate laureate in prize.Laureates) {
-                        filteredIds.Add(laureate.Id);
-                    }
-                }
+        
 
-                foreach (long id in filteredIds) {
-                    //string laureateDetails = webClient.DownloadString("http://api.nobelprize.org/v1/laureate.json?id="+id);
-                    string laureateDetails = GetData("http://api.nobelprize.org/v1/laureate.json?id=" + id);
-                    LaureateDetails laureateDetailsList = LaureateDetails.FromJson(laureateDetails);
-
-                    foreach (Laureate laureate in laureateDetailsList.Laureates) {
-                        filteredLaureates.Add(laureate);
-                    }
-                }
-
-                return new JsonResult(filteredLaureates);
+        private string getParamSeperator()
+        {
+            if (paramCount == 0)
+            {
+                paramCount++;
+                return "?";
+            }
+            else {
+                paramCount++;
+                return "&";
             }
         }
 
-        private string GetData(string v)
+        private string getData(string url)
         {
-            string downloadedData = "";
             using (WebClient webClient = new WebClient())
             {
-                downloadedData = webClient.DownloadString(v);
+                return webClient.DownloadString(url);
             }
-            return downloadedData;
+        }
+    }
+
+    public static class Util
+    {
+        public static string FirstCharToUpper(string s)
+        {
+            if (string.IsNullOrEmpty(s))
+            {
+                return string.Empty;
+            }
+            return char.ToUpper(s[0]) + s.Substring(1);
         }
     }
 }

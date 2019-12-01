@@ -18,6 +18,17 @@ html {
   }
 }
 
+#submitButton {
+    margin-top:32px;
+    width : 120px;
+    height :38px;
+    margin-left : 15px;
+}
+
+#optionsColumn {
+    width: 110px;
+}
+
 .border-top {
   border-top: 1px solid #e5e5e5;
 }
