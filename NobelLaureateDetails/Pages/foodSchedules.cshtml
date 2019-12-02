@@ -1,0 +1,27 @@
+﻿@page
+@model NobelLaureateDetails.Pages.foodSchedulesModel
+@{
+    ViewData["Title"] = "foodSchedules";
+    FoodSchedules.Schedules[] schedules = (FoodSchedules.Schedules[])ViewData["schedules"];
+}
+
+<h1>Food Schedules - San Francisco</h1>
+<h3>JSON service from fellow student group</h3>
+
+<table class="table table-bordered table-striped">
+    <thead><tr><th>Day of Week</th><th>Start Time</th><th>End Time</th><th>Applicant</th><th>Location</th></tr></thead>
+    <tbody>
+        @foreach (FoodSchedules.Schedules schedule in schedules)
+        {
+            <tr>
+                <td>@schedule.Dayofweekstr</td>
+                <td>@schedule.Starttime</td>
+                <td>@schedule.Endtime</td>
+                <td>@schedule.Applicant</td>
+                <td>@schedule.Location</td>
+            </tr>
+        }
+
+
+    </tbody>
+</table>
