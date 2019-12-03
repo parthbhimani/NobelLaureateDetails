@@ -1,0 +1,240 @@
+{
+  "$schema": "http://json-schema.org/draft-06/schema#",
+  "$ref": "#/definitions/Schedules",
+  "definitions": {
+    "Schedules": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "laureates": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Laureate"
+          }
+        }
+      },
+      "required": [
+        "laureates"
+      ],
+      "title": "Schedules"
+    },
+    "Laureate": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "type": "string",
+          "format": "integer"
+        },
+        "firstname": {
+          "type": "string"
+        },
+        "surname": {
+          "type": "string"
+        },
+        "born": {
+          "type": "string"
+        },
+        "died": {
+          "$ref": "#/definitions/Died"
+        },
+        "bornCountry": {
+          "$ref": "#/definitions/Country"
+        },
+        "bornCountryCode": {
+          "$ref": "#/definitions/CountryCode"
+        },
+        "bornCity": {
+          "type": "string"
+        },
+        "diedCountry": {
+          "$ref": "#/definitions/Country"
+        },
+        "diedCountryCode": {
+          "$ref": "#/definitions/CountryCode"
+        },
+        "diedCity": {
+          "type": "string"
+        },
+        "gender": {
+          "type": "integer"
+        },
+        "prizes": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Prize"
+          }
+        }
+      },
+      "required": [
+        "born",
+        "bornCity",
+        "bornCountry",
+        "bornCountryCode",
+        "died",
+        "firstname",
+        "gender",
+        "id",
+        "prizes",
+        "surname"
+      ],
+      "title": "Laureate"
+    },
+    "Died": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "dateTime": {
+          "anyOf": [
+            {
+              "type": "string",
+              "format": "date-time"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "enum": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "required": [
+        "dateTime",
+        "enum"
+      ],
+      "title": "Died"
+    },
+    "Prize": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "year": {
+          "type": "string",
+          "format": "integer"
+        },
+        "category": {
+          "type": "integer"
+        },
+        "share": {
+          "type": "string",
+          "format": "integer"
+        },
+        "motivation": {
+          "type": "string"
+        },
+        "affiliations": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Affiliation"
+          }
+        },
+        "overallMotivation": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "affiliations",
+        "category",
+        "motivation",
+        "share",
+        "year"
+      ],
+      "title": "Prize"
+    },
+    "Affiliation": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "affiliationClass": {
+          "anyOf": [
+            {
+              "$ref": "#/definitions/AffiliationClass"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "anythingArray": {
+          "anyOf": [
+            {
+              "type": "array",
+              "items": {}
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "required": [
+        "affiliationClass",
+        "anythingArray"
+      ],
+      "title": "Affiliation"
+    },
+    "AffiliationClass": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "city": {
+          "type": "string"
+        },
+        "country": {
+          "$ref": "#/definitions/CountryEnum"
+        }
+      },
+      "required": [
+        "name"
+      ],
+      "title": "AffiliationClass"
+    },
+    "Country": {
+      "type": "string",
+      "enum": [
+        "USA",
+        "Spain",
+        "Jamaica",
+        "Norway",
+        "Italy",
+        "United Kingdom",
+        "Philippines"
+      ],
+      "title": "Country"
+    },
+    "CountryCode": {
+      "type": "string",
+      "enum": [
+        "US",
+        "ES",
+        "JM",
+        "NO",
+        "IT",
+        "GB",
+        "PH"
+      ],
+      "title": "CountryCode"
+    },
+    "CountryEnum": {
+      "type": "string",
+      "enum": [
+        "USA",
+        "Denmark",
+        "Australia",
+        "United Kingdom"
+      ],
+      "title": "CountryEnum"
+    }
+  }
+}

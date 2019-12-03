@@ -21,21 +21,24 @@
     <header>
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
             <div class="container">
-                <a class="navbar-brand" asp-area="" asp-page="/Index">NobelLaureateDetails</a>
+                <a class="navbar-brand" asp-area="" asp-page="/Index">Nobel Laureate Details</a>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                         aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
                 <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
-                    <ul class="navbar-nav flex-grow-1">
+                    <ul class="navbar-nav nav-fill flex-grow-1">
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-page="/Index">Discover Nobel Laureates</a>
+                            <a class="nav-link text-dark" asp-area="" asp-page="/DiscoverLaureates">Discover Nobel Laureates</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-page="/laureatesByCountry" asp-route-country="US">Laureates From US</a>
+                            <a class="nav-link text-dark" asp-area="" asp-page="/JSONOutput">JSON output</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-page="/Privacy">About</a>
+                            <a class="nav-link text-dark" asp-area="" asp-page="/foodSchedules">Food Schedules</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-page="/About">About</a>
                         </li>
                     </ul>
                 </div>

@@ -1,0 +1,17 @@
+﻿@page
+@model NobelLaureateDetails.Pages.JSONOutputModel
+@{
+    ViewData["Title"] = "JSONOutput";
+}
+
+<h1>Nobel Laureates by country JSON API</h1>
+<hr>
+<h5>Outputting Nobel laureates by Country</h5>
+
+
+<p>The API accepts contry as a 2 or 3 digit code or the country name as a whole and gives the list of nobel laureates from the country as a joson data</p>
+
+
+<p>
+    Following is the url to get the nobel laureates by country : <a asp-page="/laureatesByCountry" asp-route-country="US">Nobel laureates from the US</a>
+</p>

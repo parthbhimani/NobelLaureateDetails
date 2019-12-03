@@ -1,143 +1,21 @@
 ﻿@page
-@model NobelLaureateDetails.Pages.LaureatesModel
 @{
-    ViewData["Title"] = "Laureates";
-    Prizes.Prize[] prizes = (Prizes.Prize[])ViewData["ResultLaureates"];
 }
-<link rel="stylesheet" href="/css/index.css" media="only screen and (min-width: 800px)" type="text/css" />
-<h1><strong>Discover Nobel Laureates</strong></h1>
-<form method="post">
-    <div class="row">
-        <div class="form-group col-md-3">
-            <label for="Category">Category</label>
-            <select name="Category" class="form-control">
-                <option value="none" selected>Select a Category</option>
-                <option value="physics">Physics</option>
-                <option value="chemistry">Chemistry</option>
-                <option value="peace">Peace</option>
-                <option value="medicine">Medicine</option>
-                <option value="literature">Literature</option>
-                <option value="economics">Economics</option>
-            </select>
-        </div>
-        <div class="form-group col-md-3">
-            <label for="YearFrom">Year</label>
-            <input type="number" required class="form-control" name="YearFrom" min="1901" max="2019">
-        </div>
-        <div class="form-group col-md-3">
-            <label for="YearTo">To Year</label>
-            <input type="number" class="form-control" name="YearTo" min="1901" max="2019">
-        </div>
-        <input class="btn btn-primary" id="submitButton" type="submit" value="Discover">
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>THE NOBEL PRIZE LAUREATES</title>
+    <link rel="stylesheet" href="/css/home.css" media="only screen and (min-width: 800px)" type="text/css" />
+</head>
+<body>
+    <div id="homeBg">
+            <br />
+            <h1 class="center-align"><strong>THE NOBEL PRIZE LAUREATES</strong></h1>
+            <p class="center-align"><a href="/DiscoverLaureates"  class="btn btn-outline-warning">Click here to discover</a></p>
+            <br />
+            <h4 class="right-align"><em>Contentment is the only real wealth</em></h4>
+            <h5 class="right-align"><em>-Alfred Nobel</em></h5>
+            <iframe class="float-right" width="420" height="325" src="https://www.youtube.com/embed/ykUXN0gkt7M"></iframe>
     </div>
-
-</form>
-<hr />
-@if (Model.DataFetched)
-{
-    <table class="table table-bordered ">
-        <thead class="thead-dark">
-            <tr>
-                <th>Year</th>
-                <th>Category</th>
-                <th>Laureate</th>
-                <th id="optionsColumn"></th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var prize in prizes)
-            {
-                <tr>
-                    <td rowspan="@prize.Laureates.Length">@prize.Year</td>
-                    <td rowspan="@prize.Laureates.Length">@Util.FirstCharToUpper(prize.Category)</td>
-                    @{int i = 0;}
-                    @foreach (var laureate in prize.Laureates)
-                    {
-                        if (i > 0)
-                        {
-                        @:</tr><tr>
-                        }
-                        <td><strong>@laureate.Firstname @laureate.Surname</strong> <em>@laureate.Motivation.Replace("\"", "")</em></td>
-                        <td><a href="#detailsModal" data-laureateId="@laureate.Id" data-toggle="modal">Learn More</a></td>
-                        i++;
-
-                    }
-                </tr>
-            }
-        </tbody>
-    </table>
-
-    <div class="modal fade" id="detailsModal" tabindex="-1" role="dialog">
-        <div class="modal-dialog modal-lg" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Laureate Details</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body" id="detailsBody">
-                    <dl class="row">
-                        <dt class="col-sm-3">Name</dt>
-                        <dd class="col-sm-9" id="laureateName"></dd>
-
-                        <dt class="col-sm-3">Gender</dt>
-                        <dd class="col-sm-9" id="laureateGender"></dd>
-
-                        <dt class="col-sm-3">Born</dt>
-                        <dd class="col-sm-9" id="laureateBorn"></dd>
-
-                        <dt class="col-sm-3">Death</dt>
-                        <dd class="col-sm-9" id="laureateDeath"></dd>
-
-                        <dt class="col-sm-3">Prizes</dt>
-                        <dd class="col-sm-9" id="laureateTotalPrizes"></dd>
-                    </dl>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
-                </div>
-            </div>
-        </div>
-    </div>
-}
-
-@section Scripts{
-<script>
-    $('#detailsModal').on('show.bs.modal', function (event) {
-        var anchor = $(event.relatedTarget); // Button that triggered the modal
-        var laureateId = anchor.data("laureateid");
-        var url = "http://api.nobelprize.org/v1/laureate.json?id=" + laureateId;
-
-        $.get(url, function (data, status) {
-            var ld = data.laureates[0];
-            var lower = ld.gender;
-            $('#laureateName').text(ld.firstname + ' ' + ld.surname);            
-            $('#laureateGender').text(lower.charAt(0).toUpperCase() + lower.substring(1));
-            $('#laureateBorn').html(ld.born  + ' in <em> ' + ld.bornCity  + '</em>, <strong>' + ld.bornCountry + '</strong>');
-            if (typeof ld.diedCity !== 'undefined') {
-                $('#laureateDeath').html(ld.died  + ' in <em>' +  ld.diedCity + '</em>, <strong>' + ld.diedCountry + '</strong>');
-            } else {
-                $('#laureateDeath').html("Living")
-            }
-            var prizes = ld.prizes;
-            var prizeString;
-            $('#laureateTotalPrizes').empty();
-            for (var i = 0; i < prizes.length; i++) {
-                var prize = prizes[i];
-                var lowercategory = prize.category;
-                prizeString = "Nobel laureate for <strong>" + lowercategory.charAt(0).toUpperCase() + lowercategory.substring(1)+ " in " + prizes[i].year + "</strong> <em>" + prize.motivation.replace(/["']/g, "") + "</em>";
-                if (typeof prize.affiliations[0].name !== 'undefined') {
-                    var affiliation = prize.affiliations[0];
-                    prizeString = prizeString + " <br/><u>In affiliation with</u> : " + affiliation.name + ", " + affiliation.city +", " + affiliation.country + "";
-                }
-                
-                $('#laureateTotalPrizes').append("<p>"+prizeString+"</p>");
-            }
-            
-        });
-
-    });
-</script>
-}
-
+</body>
+</html>
